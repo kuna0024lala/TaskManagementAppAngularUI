@@ -1,0 +1,61 @@
+<div class="bg-secondary bg-opacity-10 py-2">
+    <div class="container">
+      <h1>Add New Task - Task Functionality</h1>
+    </div>
+  </div>
+  
+  <div class="container py-5">
+    <div *ngIf="message" class="alert alert-success alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" (click)="message = null" aria-label="Close"></button>
+    </div>
+  
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="title" formControlName="title">
+        <div *ngIf="taskForm.get('title')?.invalid && taskForm.get('title')?.touched" class="text-danger">
+          Title is required
+        </div>
+      </div> 
+  
+      <div class="mb-3">
+        <label for="description" class="form-label">Description</label>
+        <textarea class="form-control" id="description" formControlName="description"></textarea>
+        <div *ngIf="taskForm.get('description')?.invalid && taskForm.get('description')?.touched" class="text-danger">
+          Description is required
+        </div>
+      </div>
+  
+      <div class="mb-3">
+        <label for="duedate" class="form-label">Due Date</label>
+        <input type="date" class="form-control" id="duedate" formControlName="dueDate">
+        <div *ngIf="taskForm.get('dueDate')?.invalid && taskForm.get('dueDate')?.touched" class="text-danger">
+          Due Date is required
+        </div>
+      </div>
+  
+      <div class="mb-3">
+        <label for="assignedto" class="form-label">Assigned To</label>
+        <input type="email" class="form-control" id="assignedto" formControlName="assignedTo">
+        <div *ngIf="taskForm.get('assignedTo')?.invalid && taskForm.get('assignedTo')?.touched" class="text-danger">
+          Valid email is required
+        </div>
+      </div>
+  
+      <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="iscompleted" formControlName="isCompleted">
+        <label class="form-check-label" for="iscompleted">Is Completed?</label>
+      </div>
+  
+      <div class="mb-3">
+        <button type="submit" class="btn btn-dark" [disabled]="taskForm.invalid">
+          Submit
+        </button>
+      </div>
+    </form>
+
+    <div *ngIf="message" class="alert alert-success mt-3">{{ message }}</div>
+    <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
+  </div>
+  
