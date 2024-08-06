@@ -43,6 +43,9 @@ export class TaskListComponent implements OnInit {
           this.tasks = response.taskItems || [];
           this.tasks = response.taskItems;
           this.totalPages = Array.from({ length: response.TotalPages }, (_, i) => i + 1);
+          this.prevPage = this.pageNumber > 1 ? this.pageNumber - 1 : null;
+          this.nextPage = this.pageNumber < response.TotalPages ? this.pageNumber + 1 : null;
+
           
         },
         error: (error) => {
