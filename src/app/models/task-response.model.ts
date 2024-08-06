@@ -1,9 +1,9 @@
 import { TaskItem } from "./task-item.model";
 
 export interface TaskResponse {
-    TotalPages: number;
-    PageNumber: number;
-    PageSize: number;
+    totalPages: number;
+    pageNumber: number;
+    pagesize: number;
     taskItems: TaskItem[];
   }
   

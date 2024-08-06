@@ -20,7 +20,7 @@ export class TaskListComponent implements OnInit {
   message: string | null = null;
   error: string | null = null;
   pageNumber: number = 1;
-  pageSize: number = 3;
+  pagesize: number = 3;
   searchQuery: string = '';
   prevPage: number | null = null;
   nextPage: number | null = null;
@@ -37,14 +37,14 @@ export class TaskListComponent implements OnInit {
   }
 
   loadTasks(): void {
-    this.taskService.getTasks(this.searchQuery, this.sortBy, this.sortDirection, this.pageSize, this.pageNumber)
+    this.taskService.getTasks(this.searchQuery, this.sortBy, this.sortDirection, this.pagesize, this.pageNumber)
       .subscribe({
         next: (response: TaskResponse) => {
           this.tasks = response.taskItems || [];
           this.tasks = response.taskItems;
-          this.totalPages = Array.from({ length: response.TotalPages }, (_, i) => i + 1);
+          this.totalPages = Array.from({ length: response.totalPages }, (_, i) => i + 1);
           this.prevPage = this.pageNumber > 1 ? this.pageNumber - 1 : null;
-          this.nextPage = this.pageNumber < response.TotalPages ? this.pageNumber + 1 : null;
+          this.nextPage = this.pageNumber < response.totalPages ? this.pageNumber + 1 : null;
 
           
         },
@@ -66,7 +66,7 @@ export class TaskListComponent implements OnInit {
       searchQuery: this.searchQuery,
       sortBy: this.sortBy,
       sortDirection: this.sortDirection,
-      pageSize: this.pageSize,
+      pageSize: this.pagesize,
       pageNumber: this.pageNumber,
       selectedIds: this.selectedIds.map(id => parseInt(id, 10))
     };
