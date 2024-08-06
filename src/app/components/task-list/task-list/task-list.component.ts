@@ -1,4 +1,3 @@
-// src/app/components/task-list/task-list.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { TaskService } from '../../../services/task.service';
@@ -7,6 +6,7 @@ import { TaskResponse } from '../../../models/task-response.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { ExportRequest } from '../../../models/export-request.model';
 
 @Component({
   selector: 'app-task-list',
@@ -20,11 +20,11 @@ export class TaskListComponent implements OnInit {
   message: string | null = null;
   error: string | null = null;
   pageNumber: number = 1;
-  pageSize: number = 10;
+  pageSize: number = 3;
   searchQuery: string = '';
   prevPage: number | null = null;
   nextPage: number | null = null;
-  totalPages: number[] = [];
+  totalPages: number [] = [];
   sortBy: string = 'title';
   sortDirection: string = 'asc';
   selectedIds: string[] = [];
@@ -37,17 +37,13 @@ export class TaskListComponent implements OnInit {
   }
 
   loadTasks(): void {
-    console.log('Loading tasks...');
     this.taskService.getTasks(this.searchQuery, this.sortBy, this.sortDirection, this.pageSize, this.pageNumber)
       .subscribe({
         next: (response: TaskResponse) => {
-          this.tasks = response.TaskItems || [];
-          console.log('API Response:', response); // Debug API response
-          this.tasks = response.TaskItems;
-          console.log('Tasks:', this.tasks); // Debug tasks
+          this.tasks = response.taskItems || [];
+          this.tasks = response.taskItems;
           this.totalPages = Array.from({ length: response.TotalPages }, (_, i) => i + 1);
-          this.prevPage = this.pageNumber > 1 ? this.pageNumber - 1 : null;
-          this.nextPage = this.pageNumber < response.TotalPages ? this.pageNumber + 1 : null;
+          
         },
         error: (error) => {
           console.error('Error loading tasks:', error);
@@ -63,11 +59,33 @@ export class TaskListComponent implements OnInit {
   }
 
   exportToExcel(): void {
-    this.message = 'Tasks exported to Excel successfully.';
-  }
+    const request: ExportRequest = {
+      searchQuery: this.searchQuery,
+      sortBy: this.sortBy,
+      sortDirection: this.sortDirection,
+      pageSize: this.pageSize,
+      pageNumber: this.pageNumber,
+      selectedIds: this.selectedIds.map(id => parseInt(id, 10))
+    };
 
+    this.taskService.exportToExcel(request)
+      .subscribe({
+        next: (response) => {
+          const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'tasks.xlsx';
+          a.click();
+        },
+        error: (error) => {
+          this.error = 'Failed to export tasks to Excel';
+        }
+      });
+  }
+  
   searchTasks(): void {
-    this.pageNumber = 1; // Reset to first page on search
+    this.pageNumber = 1; 
     this.loadTasks();
   }
 
@@ -84,7 +102,9 @@ export class TaskListComponent implements OnInit {
   }
 
   updateSelectedIds(): void {
-    this.selectedIds = this.tasks.filter(task => task.isSelected).map(task => task.id.toString());
+    this.selectedIds = this.tasks
+      .filter((task) => task.isSelected)
+      .map((task) => task.id.toString());
   }
 
   editTask(taskId: number): void {
@@ -93,22 +113,26 @@ export class TaskListComponent implements OnInit {
   }
 
   deleteTask(taskId: number): void {
-    this.taskService.deleteTask(taskId).subscribe({
-      next: () => {
-        this.tasks = this.tasks.filter(task => task.id !== taskId);
-        this.message = `Deleted task with ID: ${taskId}`;
-      },
-      error: (error) => {
-        this.error = 'Failed to delete task';
-        console.error(error);
-      }
-    });
+    this.taskService.deleteTask(taskId)
+      .subscribe({
+        next: () => {
+          this.tasks = this.tasks.filter((task) => task.id !== taskId);
+          this.message = `Deleted task with ID: ${taskId}`;
+          this.loadTasks();
+        },
+        error: (error) => {
+          console.error('Error deleting task:', error);
+          this.error = 'Failed to delete task';
+        }
+      });
   }
 
-  changePage(pageNumber: number): void {
-    if (pageNumber > 0 && pageNumber <= this.totalPages.length) {
+  onPageChange(pageNumber: number): void {
+    console.log('Page change requested:', pageNumber);
+    if (pageNumber >= 1 && pageNumber <= this.totalPages.length) {
       this.pageNumber = pageNumber;
       this.loadTasks();
+      console.log('Page number updated:', this.pageNumber);
     }
   }
 

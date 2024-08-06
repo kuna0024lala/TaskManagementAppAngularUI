@@ -1,1 +1,57 @@
-<p>edit-task works!</p>
+<div class="bg-secondary bg-opacity-10 py-2">
+    <div class="container">
+        <h1>Edit Task - Task Functionality</h1>
+    </div>
+</div>
+
+<div class="container py-5"> 
+    <div *ngIf="message" class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" aria-label="Close" (click)="message = null"></button>
+    </div>
+
+    <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ error }}
+        <button type="button" class="btn-close" aria-label="Close" (click)="error = null"></button>
+    </div>
+
+    <form [formGroup]="editTaskForm" (ngSubmit)="onSubmit()">
+
+        <div class="mb-3">
+            <label for="id" class="form-label">Id</label>
+            <input type="text" id="id" class="form-control" formControlName="id" readonly />
+        </div>
+
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" id="title" class="form-control" formControlName="title" />
+            <div *ngIf="editTaskForm.get('title')?.invalid && (editTaskForm.get('title')?.dirty || editTaskForm.get('title')?.touched)" class="text-danger">
+                Title is required
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description" class="form-control" formControlName="description"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="duedate" class="form-label">Due Date</label>
+            <input type="date" id="duedate" class="form-control" formControlName="dueDate" />
+        </div>
+
+        <div class="mb-3">
+            <label for="assignedto" class="form-label">Assigned To</label>
+            <input type="email" id="assignedto" class="form-control" formControlName="assignedTo" />
+        </div>
+
+        <div class="form-check mb-3">
+            <input type="checkbox" id="iscompleted" class="form-check-input" formControlName="isCompleted" />
+            <label for="iscompleted" class="form-check-label">Is Completed</label>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-dark" [disabled]="editTaskForm.invalid">Update</button>
+        </div>
+    </form>
+</div>

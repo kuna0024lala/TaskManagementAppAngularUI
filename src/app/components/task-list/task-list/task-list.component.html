@@ -1,116 +1,128 @@
 <div class="bg-secondary bg-opacity-10 py-2">
-    <div class="container">
-      <h1>Show All Tasks - Task Functionality</h1>
-    </div>
+  <div class="container">
+    <h1>Show All Tasks - Task Functionality</h1>
   </div>
-  
-  <div *ngIf="message" class="alert alert-success alert-dismissible fade show" role="alert">
-    {{ message }}
-    <button type="button" class="btn-close" (click)="closeAlert()" aria-label="Close"></button>
-  </div>
+</div>
+
+<div *ngIf="message" class="alert alert-success alert-dismissible fade show" role="alert">
+  {{ message }}
+  <button type="button" class="btn-close" (click)="closeAlert()" aria-label="Close"></button>
+</div>
 
 
-  
-  <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-3">
-        <button (click)="exportToExcel()" class="btn btn-success">Export to Excel</button>
-      </div>
-      <div class="col-md-3 d-flex">
-        <input type="text" class="form-control" [(ngModel)]="searchQuery" id="searchQuery" name="searchQuery" placeholder="Search tasks" />
-        <button (click)="searchTasks()" class="btn btn-warning ms-3">Search</button>
-      </div>
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-3">
+      <button (click)="exportToExcel()" class="btn btn-success">Export to Excel</button>
+    </div>
+    <div class="col-md-3 d-flex">
+      <input type="text" class="form-control" [(ngModel)]="searchQuery" id="searchQuery" name="searchQuery" placeholder="Search tasks" />
+      <button (click)="searchTasks()" class="btn btn-warning ms-3">Search</button>
     </div>
   </div>
-  
-  <div class="container py-5">
-    <table class="table table-bordered">
-      <thead class="table-light">
-        <tr>
-          <th class="text-center" style="width: 5%">
-            Id
-            <input type="checkbox" (change)="toggleAllSelection($event)" id="selectAllCheckbox" name="selectAll" />
-          </th>
-          <th class="text-center">
-            Title
-            <span>
-              <button (click)="sortTasks('Title', 'Asc')" class="btn btn-sm btn-link">
-                <i class="bi bi-arrow-up"></i>
-              </button>
-              <button (click)="sortTasks('Title', 'Desc')" class="btn btn-sm btn-link">
-                <i class="bi bi-arrow-down"></i>
-              </button>
-            </span>
-          </th>
-          <th class="text-center">
-            Description
-            <span>
-              <button (click)="sortTasks('Description', 'Asc')" class="btn btn-sm btn-link">
-                <i class="bi bi-arrow-up"></i>
-              </button>
-              <button (click)="sortTasks('Description', 'Desc')" class="btn btn-sm btn-link">
-                <i class="bi bi-arrow-down"></i>
-              </button>
-            </span>
-          </th>
-          <th class="text-center">
-            DueDate
-            <span>
-              <button (click)="sortTasks('DueDate', 'Asc')" class="btn btn-sm btn-link">
-                <i class="bi bi-arrow-up"></i>
-              </button>
-              <button (click)="sortTasks('DueDate', 'Desc')" class="btn btn-sm btn-link">
-                <i class="bi bi-arrow-down"></i>
-              </button>
-            </span>
-          </th>
-          <th class="text-center">
-            Assigned To
-            <span>
-              <button (click)="sortTasks('AssignedTo', 'Asc')" class="btn btn-sm btn-link">
-                <i class="bi bi-arrow-up"></i>
-              </button>
-              <button (click)="sortTasks('AssignedTo', 'Desc')" class="btn btn-sm btn-link">
-                <i class="bi bi-arrow-down"></i>
-              </button>
-            </span>
-          </th>
-          <th class="text-center">
-            IsCompleted
-            <span>
-              <button (click)="sortTasks('IsCompleted', 'Asc')" class="btn btn-sm btn-link">
-                <i class="bi bi-arrow-up"></i>
-              </button>
-              <button (click)="sortTasks('IsCompleted', 'Desc')" class="btn btn-sm btn-link">
-                <i class="bi bi-arrow-down"></i>
-              </button>
-            </span>
-          </th>
-          <th class="text-center">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let task of tasks">
-          <td class="text-center">
-            <input type="checkbox" [(ngModel)]="task.isSelected" (change)="updateSelectedIds()" id="taskCheckbox-{{task.id}}" name="taskCheckbox-{{task.id}}" />
-          </td>
-          <td>{{ task.title }}</td>
-          <td>{{ task.description }}</td>
-          <td>{{ task.dueDate | date: 'yyyy-MM-dd' }}</td>
-          <td>{{ task.assignedTo }}</td>
-          <td>{{ task.isCompleted ? 'Yes' : 'No' }}</td>
-          <td class="text-center">
-            <button (click)="editTask(task.id)" class="btn btn-primary btn-sm">Edit</button>
-          </td>
-          <td class="text-center">
-            <button (click)="deleteTask(task.id)" class="btn btn-danger btn-sm">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  
+</div>
+
+<div class="container py-5">
+  <table class="table table-bordered">
+    <thead class="table-light">
+      <tr>
+        <th class="text-center" style="width: 5%">
+          Id
+          <input type="checkbox" (change)="toggleAllSelection($event)" id="selectAllCheckbox" name="selectAll" />
+        </th>
+        <th class="text-center">
+          Title
+          <span>
+            <button (click)="sortTasks('Title', 'Asc')" class="btn btn-sm btn-link">
+              <i class="bi bi-arrow-up"></i>
+            </button>
+            <button (click)="sortTasks('Title', 'Desc')" class="btn btn-sm btn-link">
+              <i class="bi bi-arrow-down"></i>
+            </button>
+          </span>
+        </th>
+        <th class="text-center">
+          Description
+          <span>
+            <button (click)="sortTasks('Description', 'Asc')" class="btn btn-sm btn-link">
+              <i class="bi bi-arrow-up"></i>
+            </button>
+            <button (click)="sortTasks('Description', 'Desc')" class="btn btn-sm btn-link">
+              <i class="bi bi-arrow-down"></i>
+            </button>
+          </span>
+        </th>
+        <th class="text-center">
+          DueDate
+          <span>
+            <button (click)="sortTasks('DueDate', 'Asc')" class="btn btn-sm btn-link">
+              <i class="bi bi-arrow-up"></i>
+            </button>
+            <button (click)="sortTasks('DueDate', 'Desc')" class="btn btn-sm btn-link">
+              <i class="bi bi-arrow-down"></i>
+            </button>
+          </span>
+        </th>
+        <th class="text-center">
+          Assigned To
+          <span>
+            <button (click)="sortTasks('AssignedTo', 'Asc')" class="btn btn-sm btn-link">
+              <i class="bi bi-arrow-up"></i>
+            </button>
+            <button (click)="sortTasks('AssignedTo', 'Desc')" class="btn btn-sm btn-link">
+              <i class="bi bi-arrow-down"></i>
+            </button>
+          </span>
+        </th>
+        <th class="text-center">
+          IsCompleted
+          <span>
+            <button (click)="sortTasks('IsCompleted', 'Asc')" class="btn btn-sm btn-link">
+              <i class="bi bi-arrow-up"></i>
+            </button>
+            <button (click)="sortTasks('IsCompleted', 'Desc')" class="btn btn-sm btn-link">
+              <i class="bi bi-arrow-down"></i>
+            </button>
+          </span>
+        </th>
+        <th class="text-center">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasks">
+        <td class="text-center">
+          <input type="checkbox" [(ngModel)]="task.isSelected" (change)="updateSelectedIds()" id="taskCheckbox-{{task.id}}" name="taskCheckbox-{{task.id}}" />
+        </td>
+        <td>{{ task.title }}</td>
+        <td>{{ task.description }}</td>
+        <td>{{ task.dueDate | date: 'yyyy-MM-dd' }}</td>
+        <td>{{ task.assignedTo }}</td>
+        <td>{{ task.isCompleted ? 'Yes' : 'No' }}</td>
+        <td class="text-center">
+          <button (click)="editTask(task.id)" class="btn btn-primary btn-sm">Edit</button>
+        </td>
+        <td class="text-center">
+          <button (click)="deleteTask(task.id)" class="btn btn-danger btn-sm">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="container">
     <nav aria-label="Page navigation example">
       <ul class="pagination">
-        <li class="page-item" [ngClass]="{ 'disabled': prevPage === null }">
-          
-  
+        <li class="page-item" [ngClass]="{ 'disabled': pageNumber === 1 }">
+          <a class="page-link" (click)="onPageChange(pageNumber - 1)" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+        <li class="page-item" *ngFor="let page of totalPages" [ngClass]="{ 'active': page === pageNumber }">
+          <a class="page-link" (click)="onPageChange(page)">{{ page }}</a>
+        </li>
+        <li class="page-item" [ngClass]="{ 'disabled': pageNumber === totalPages.length }">
+          <a class="page-link" (click)="onPageChange(pageNumber + 1)">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>  
+</div>
+
+

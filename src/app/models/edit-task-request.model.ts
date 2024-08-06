@@ -1,3 +1,5 @@
+
+
 export interface EditTaskRequest {
     id: number;
     title: string;
@@ -5,5 +7,6 @@ export interface EditTaskRequest {
     dueDate?: Date;
     assignedTo: string;
     isCompleted: boolean;
+    taskItems?: any;
   }
   

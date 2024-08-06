@@ -17,7 +17,7 @@ export class TaskService {
   constructor(private http: HttpClient) { }
 
 
-  getTasks(searchQuery: string = '', sortBy: string = '', sortDirection: string = 'asc', pageSize: number = 10, pageNumber: number = 1): Observable<TaskResponse> {
+  getTasks(searchQuery: string = '', sortBy: string = '', sortDirection: string = 'asc', pageSize: number, pageNumber: number): Observable<TaskResponse> {
     let params = new HttpParams()
       .set('searchQuery', searchQuery)
       .set('sortBy', sortBy)
@@ -33,6 +33,10 @@ export class TaskService {
     return this.http.post<TaskItem>(this.apiUrl, addTaskRequest)
       .pipe(catchError(this.handleError));
   }
+
+  getTask(id: number): Observable<TaskItem> {
+    return this.http.get<TaskItem>(`${this.apiUrl}/${id}`);
+  }
   
   
 
@@ -45,7 +49,8 @@ export class TaskService {
   }
 
   exportToExcel(exportRequest: ExportRequest): Observable<Blob> {
-    return this.http.post(`${this.apiUrl}/exportToExcel`, exportRequest, { responseType: 'blob' });
+    const url = `${this.apiUrl}/export`;
+    return this.http.post(url, exportRequest,{ responseType: 'blob' });
   }
 
 
